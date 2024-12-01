@@ -1,14 +1,8 @@
 import sqlite3
-import csv
+import pandas as pd
 
-df = sqlite3.connect('data/example.bd')
-cursor = df.cursor()
+example = sqlite3.connect('data/example.bd')
+cursor = example.cursor()
 
-example = cursor.execute(''' SELECT * FROM example ''').fetchall()
-
-with open('output/output.csv', 'w', newline='') as csvfile:
-    writer = csv.writer(csvfile)
-    writer.writerow([i[0] for i in cursor.description])
-    writer.writerows(example)
-
-df.close()
+df = pd.read_sql('select * from example', example)
+df.to_csv('output\output.csv',index=False)
